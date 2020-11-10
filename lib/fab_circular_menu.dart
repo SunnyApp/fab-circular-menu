@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' as vector;
@@ -8,6 +9,12 @@ typedef DisplayChange = void Function(bool isOpen);
 class FabCircularMenu extends StatefulWidget {
   final List<Widget> children;
   final Alignment alignment;
+
+  /// When used as the floatingActionButton in a Scaffold, there is a default margin
+  /// applied that needs to be removed.  If this button is placed manually, this offset
+  /// can cause issues.  Set this value to false to _not_ attempt to remove the default
+  /// FAB margin
+  final bool removeDefaultFabMargin;
   final Color ringColor;
   final double ringDiameter;
   final double ringWidth;
@@ -35,6 +42,7 @@ class FabCircularMenu extends StatefulWidget {
       this.fabElevation = 8.0,
       this.fabColor,
       this.fabOpenColor,
+      this.removeDefaultFabMargin = true,
       this.fabCloseColor,
       this.fabIconBorder,
       this.fabChild,
@@ -130,7 +138,9 @@ class FabCircularMenuState extends State<FabCircularMenu>
     return Container(
       margin: widget.fabMargin,
       // Removes the default FAB margin
-      transform: Matrix4.translationValues(16.0, 16.0, 0.0),
+      transform: widget.removeDefaultFabMargin
+          ? Matrix4.translationValues(16.0, 16.0, 0.0)
+          : null,
       child: Stack(
         alignment: widget.alignment,
         children: <Widget>[
