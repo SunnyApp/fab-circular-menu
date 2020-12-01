@@ -9,6 +9,7 @@ typedef DisplayChange = void Function(bool isOpen);
 class FabCircularMenu extends StatefulWidget {
   final List<Widget> children;
   final Alignment alignment;
+  final Key buttonKey;
 
   /// When used as the floatingActionButton in a Scaffold, there is a default margin
   /// applied that needs to be removed.  If this button is placed manually, this offset
@@ -34,6 +35,7 @@ class FabCircularMenu extends StatefulWidget {
 
   FabCircularMenu(
       {Key key,
+      this.buttonKey,
       this.alignment = Alignment.bottomRight,
       this.ringColor,
       this.ringDiameter,
@@ -187,6 +189,7 @@ class FabCircularMenuState extends State<FabCircularMenu>
             width: widget.fabSize,
             height: widget.fabSize,
             child: RawMaterialButton(
+              key: widget.buttonKey,
               fillColor: _colorAnimation.value,
               shape: _fabIconBorder,
               elevation: widget.fabElevation,
