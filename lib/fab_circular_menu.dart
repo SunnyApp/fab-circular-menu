@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fab_circular_menu/stack_with_all_children_receive_events.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vector_math/vector_math.dart' as vector;
@@ -36,7 +37,7 @@ class FabCircularMenu extends StatefulWidget {
   FabCircularMenu(
       {Key key,
       this.buttonKey,
-      this.alignment = Alignment.bottomRight,
+      this.alignment = Alignment.bottomCenter,
       this.ringColor,
       this.ringDiameter,
       this.ringWidth,
@@ -138,19 +139,20 @@ class FabCircularMenuState extends State<FabCircularMenu>
     }
 
     return Container(
-      margin: widget.fabMargin,
       // Removes the default FAB margin
       transform: widget.removeDefaultFabMargin
           ? Matrix4.translationValues(16.0, 16.0, 0.0)
           : null,
-      child: Stack(
+      child: StackWithAllChildrenReceiveEvents(
+        overflow: Overflow.visible,
         alignment: widget.alignment,
         children: <Widget>[
+
           // Ring
           Transform(
             transform:
-                Matrix4.translationValues(_translationX, _translationY, 0.0)
-                  ..scale(_scaleAnimation.value),
+            Matrix4.translationValues(_translationX, _translationY, 0.0)
+              ..scale(_scaleAnimation.value),
             alignment: FractionalOffset.center,
             child: OverflowBox(
               maxWidth: _ringDiameter,
@@ -162,22 +164,22 @@ class FabCircularMenuState extends State<FabCircularMenu>
                   painter: _RingPainter(width: _ringWidth, color: _ringColor),
                   child: _scaleAnimation.value == 1.0
                       ? Transform.rotate(
-                          angle: (2 * pi) *
-                              _rotateAnimation.value *
-                              _directionX *
-                              _directionY,
-                          child: Container(
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: widget.children
-                                  .asMap()
-                                  .map((index, child) => MapEntry(index,
-                                      _applyTransformations(child, index)))
-                                  .values
-                                  .toList(),
-                            ),
-                          ),
-                        )
+                    angle: (2 * pi) *
+                        _rotateAnimation.value *
+                        _directionX *
+                        _directionY,
+                    child: Container(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: widget.children
+                            .asMap()
+                            .map((index, child) => MapEntry(index,
+                            _applyTransformations(child, index)))
+                            .values
+                            .toList(),
+                      ),
+                    ),
+                  )
                       : Container(),
                 ),
               ),
@@ -186,6 +188,7 @@ class FabCircularMenuState extends State<FabCircularMenu>
 
           // FAB
           Container(
+            margin: widget.fabMargin,
             width: widget.fabSize,
             height: widget.fabSize,
             child: RawMaterialButton(
@@ -210,6 +213,9 @@ class FabCircularMenuState extends State<FabCircularMenu>
                       : widget.fabChild),
             ),
           ),
+
+
+
         ],
       ),
     );
